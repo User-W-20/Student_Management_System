@@ -1,5 +1,6 @@
 #include"Student.h"
 #include<string>
+#include<iomanip>
 Student::Student(const std::string&id,const std::string&name,double score):id(id),name(name),score(score){}
 
 std::string Student::getId()const {
@@ -19,7 +20,7 @@ void Student::setScore(double s) {
 }
 
 void Student::display()const {
-	std::cout << "ID: " << id
-		<< ",Name: " << name
-		<< ",Score: " << score << std::endl;
+	std::cout << std::left << std::setw(10) << id
+		<< std::setw(10) << name
+		<< std::right << std::fixed << std::setprecision(2) << score << "\n";
 }
