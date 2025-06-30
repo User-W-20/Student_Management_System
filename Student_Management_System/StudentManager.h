@@ -4,6 +4,10 @@
 #include<algorithm>
 #include<fstream>
 #include<iomanip>
+#include<filesystem>
+#include<sstream>
+#include<chrono>
+#include<ctime>
 class StudentManager {
 private:
 	std::vector<Student>students;
@@ -20,4 +24,7 @@ public:
 	void findByNamePart(const std::string& keyword)const;
 	void showStatistics()const;
 	bool exists(const std::string& id)const;
+	void exportAllToCSV(const std::string& filename)const;
+	void findByScoreRange(double minScore, double maxScore)const;
+	void backupFile(const std::string& fileName)const;
 };

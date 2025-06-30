@@ -18,6 +18,8 @@ int main() {
 		std::cout << "6. 成绩排序\n";
 		std::cout << "7. 模糊查找学生（按姓名）\n";
 		std::cout << "8. 成绩统计分析 \n";
+		std::cout << "9. 导出为CSV\n";
+		std::cout << "10. 按成绩区间查找\n";
 		std::cout << "0. 退出\n";
 		std::cout << "请输入选项：";
 		std::cin >> choice;
@@ -52,6 +54,8 @@ int main() {
 			std::cin >> id;
 			if (auto* p = manager.findById(id)) {
 				p->display();
+				p->exportToCSV("student.csv");
+				std::cout << "该学生信息已导出到 student.csv\n";
 			}
 			else {
 				std::cout << "未找到该学生\n";
@@ -74,7 +78,19 @@ int main() {
 		case 8:
 			manager.showStatistics();
 			break;
+		case 9:
+			manager.exportAllToCSV("students.csv");
+			std::cout << "已导出到 students.csv\n";
+			break;
+		case 10: {
+			double minScore, maxScore;
+			std::cout << "请输入分数区间（如 60 80）：";
+			std::cin >> minScore >> maxScore;
+			manager.findByScoreRange(minScore, maxScore);
+			break;
+		}
 		case 0:
+			manager.backupFile("students.txt");
 			manager.saveToFile("students.txt");
 			std::cout << "程序结束。\n";
 			break;

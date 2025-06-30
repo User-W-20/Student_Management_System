@@ -18,4 +18,6 @@ public:
 	void setScore(double);
 
 	void display()const;
+
+	void exportToCSV(const std::string& filename)const;
 };

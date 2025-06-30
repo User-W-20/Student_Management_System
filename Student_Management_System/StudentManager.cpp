@@ -136,3 +136,55 @@ void StudentManager::showStatistics()const {
 bool StudentManager::exists(const std::string& id)const {
 	return std::any_of(students.begin(), students.end(), [&](const Student& s) {return s.getId() == id; });
 }
+
+void StudentManager::exportAllToCSV(const std::string& filename)const {
+	std::ofstream out(filename);
+
+	if (out) {
+		out << "ID,Name,Score\n";
+		for (const auto& student : students) {
+			out << student.getId() << "," << student.getName() << "," << std::fixed << std::setprecision(2) << student.getScore() << "\n";
+		}
+	}
+}
+
+void StudentManager::findByScoreRange(double minScore, double maxScore)const {
+	bool found = false;
+
+	std::cout << std::left << std::setw(10) << "ID"
+		<< std::setw(10) << "Name"
+		<< std::right << "Score\n";
+	std::cout << "-------------------------------\n";
+
+	for (const auto& student : students) {
+		double score = student.getScore();
+		if (score >= minScore && score <= maxScore) {
+			student.display();
+			found = true;
+		}
+	}
+	if (!found) {
+		std::cout << "没有找到分数在 [" <<minScore<< ", " <<maxScore<< "] 区间的学生。\n";
+	}
+}
+
+void StudentManager::backupFile(const std::string& fileName)const {
+	namespace fs = std::filesystem;
+	if (!fs::exists(fileName)) return;//没有原文件就不备份
+
+	// 获取当前时间戳
+	auto now = std::chrono::system_clock::now();
+	std::time_t time= std::chrono::system_clock::to_time_t(now);
+
+	std::stringstream ss;
+	std::tm tm_buf;
+	localtime_s(&tm_buf,&time);
+	ss << std::put_time(&tm_buf, "%Y%m%d_%H%M%S");
+	std::string timestamp = ss.str();
+
+	// 构造备份文件名
+	std::string backupName = fileName + ".bak." + timestamp;
+
+	// 复制文件
+	fs::copy_file(fileName, backupName, fs::copy_options::overwrite_existing);
+}
